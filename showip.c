@@ -28,7 +28,7 @@ int main (int argc, char **argv)
 
   printf("IP addresses for %s\n\n", argv[1]);
 
-  for (node_ptr = result; node_ptr != NULL; node_ptr = node_ptr->ai_next)
+  for (node_ptr = result; node_ptr; node_ptr = node_ptr->ai_next)
   {
     char *ipver;
 
