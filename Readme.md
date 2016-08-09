@@ -1,6 +1,19 @@
 ## Show IP
 Simple domain name resolution tool (IPv4 + IPv6).
 
+### Installation
+
+```sh
+~$ ./install.sh
+```
+
+You can change the destination with the `PREFIX_DIR` environment
+variable (it defaults to `/usr/local/bin`):
+
+```sh
+~$ PREFIX_DIR=~/bin ./install.sh
+```
+
 ### Usage
 
 ```sh
@@ -9,7 +22,7 @@ Simple domain name resolution tool (IPv4 + IPv6).
 
 ## License
 
-Copyright (C) 2016, Rodrigo González López <rodrigosloop@gmail.com>
+Copyright (C) 2016, Rodrigo González López &lt;<rodrigosloop@gmail.com>&gt;
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
