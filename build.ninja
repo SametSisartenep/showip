@@ -1,5 +1,10 @@
 cppflags = -D_FORTIFY_SOURCE=2
-cflags = -Wall -Wextra -Werror -Wformat-security -Wpointer-arith -Wformat-nonliteral -Winit-self -fno-exceptions -fstack-protector-strong -fsanitize=safe-stack --param=ssp-buffer-size=4 -Wpedantic -pedantic -pipe -O2 -fpie -pie -Wl,--no-undefined -Wl,--build-id=sha1 -Wl,-z,relro -Wl,-z,now -Wl,-O1a -s
+cflags = -Wall -Wextra -Werror -Wformat-security -Wpointer-arith $
+-Wformat-nonliteral -Winit-self -fno-exceptions $
+-fstack-protector-strong -fsanitize=safe-stack $
+--param=ssp-buffer-size=4 -Wpedantic -pedantic $
+-pipe -O2 -fpie -pie -Wl,--no-undefined -Wl,--build-id=sha1 $
+-Wl,-z,relro -Wl,-z,now -Wl,-O1a -s
 
 rule cc
   command = $${CC:-clang} $cppflags $cflags -o $out $in
