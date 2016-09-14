@@ -26,7 +26,7 @@ int main (int argc, char **argv)
 
 	argp_parse(&argp, argc, argv, 0, &argsno, 0);
 
-	struct addrinfo hints = {0}, *result, *node_ptr;
+	struct addrinfo hints, *result, *node_ptr;
 	int status;
 	char ipstr[INET6_ADDRSTRLEN];
 
@@ -52,7 +52,11 @@ int main (int argc, char **argv)
 				break;
 		}
 
-		getnameinfo(node_ptr->ai_addr, node_ptr->ai_addrlen, ipstr, sizeof ipstr, NULL, 0, NI_NUMERICHOST);
+		getnameinfo(
+			node_ptr->ai_addr, node_ptr->ai_addrlen,
+			ipstr, sizeof ipstr,
+			NULL, 0, NI_NUMERICHOST
+			);
 		printf("\t%s:\t%s\n", ipver, ipstr);
 	}
 

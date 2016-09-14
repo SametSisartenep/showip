@@ -30,8 +30,7 @@ function install_it() {
 }
 
 function build_it() {
-	gyp --depth=. -f ninja
-	ninja -v -C out/Default -f build.ninja
+  ninja
 }
 
 function setup() {
@@ -56,7 +55,7 @@ function setup() {
 		print_done
 
 		setup
-fi
+  fi
 }
 
 setup
