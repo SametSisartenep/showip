@@ -1,49 +1,78 @@
+#include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <libgen.h>
 #include <string.h>
-#include <argp.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <netdb.h>
 
-const char *argp_program_version = "ShowIP v0.1.0";
-const char *argp_program_bug_address = "Rodrigo González López <rodrigosloop@gmail.com>";
+#include "arg.h"
 
-static char doc[] = "ShowIP -- A simple domain name resolution tool.";
-static char args_doc[] = "hostname";
+#define VERSION "1.0"
+#define AUTHOR "Rodrigo González López <rodrigosloop AT gmail DOT com>"
 
-static struct argp argp = { 0, 0, args_doc, doc, 0, 0, 0 };
+#define HNSIZE 512
 
-int main (int argc, char **argv)
+static void die(const char*, ...);
+static void usage(void);
+
+char *argv0;
+
+void
+die(const char *errstr, ...)
 {
-	if (argc != 2) {
-		argp_help(&argp, stderr, ARGP_HELP_USAGE, 0);
-		return 1;
+	va_list ap;
+
+	va_start(ap, errstr);
+	vfprintf(stderr, errstr, ap);
+	va_end(ap);
+	exit(EXIT_FAILURE);
+}
+
+void
+usage(void)
+{
+	die("usage: %s <hostname>\n", basename(argv0));
+}
+
+int main (int argc, char *argv[])
+{
+	ARGBEGIN {
+	case 'v':
+		die("showip-%s, Copyright (C) 2016 %s"
+		    ", see LICENSE for details.\n", VERSION, AUTHOR);
+	default:
+		usage();
+	} ARGEND;
+
+	char hn[HNSIZE];
+
+	if (argc > 0) {
+		strncpy(hn, argv[0], HNSIZE);
 	}
 
-	int argsno = 1;
+	struct addrinfo hints, *res, *np;
+	int s;
 
-	argp_parse(&argp, argc, argv, 0, &argsno, 0);
-
-	struct addrinfo hints, *result, *node_ptr;
-	int status;
-	char ipstr[INET6_ADDRSTRLEN];
-
+	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 
-	if ((status = getaddrinfo(argv[1], NULL, &hints, &result)) != 0) {
-		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
+	if ((s = getaddrinfo(hn, NULL, &hints, &res)) != 0) {
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(s));
 		return 2;
 	}
 
-	printf("IP addresses for %s\n\n", argv[1]);
+	printf("IP addresses for %s\n\n", hn);
 
-	for (node_ptr = result; node_ptr; node_ptr = node_ptr->ai_next) {
+	for (np = res; np; np = np->ai_next) {
 		char *ipver;
+		char ipstr[INET6_ADDRSTRLEN];
 
-		switch (node_ptr->ai_family) {
+		switch (np->ai_family) {
 			case AF_INET:
 				ipver = "IPv4";
 				break;
@@ -52,15 +81,14 @@ int main (int argc, char **argv)
 				break;
 		}
 
-		getnameinfo(
-			node_ptr->ai_addr, node_ptr->ai_addrlen,
+		getnameinfo(np->ai_addr, np->ai_addrlen,
 			ipstr, sizeof ipstr,
-			NULL, 0, NI_NUMERICHOST
-			);
+			NULL, 0, NI_NUMERICHOST);
+
 		printf("\t%s:\t%s\n", ipver, ipstr);
 	}
 
-	freeaddrinfo(result);
+	freeaddrinfo(res);
 
-	return 0;
+	return EXIT_SUCCESS;
 }

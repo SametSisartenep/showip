@@ -26,7 +26,7 @@ function print_done() {
 }
 
 function install_it() {
-	sudo install -m755 out/Default/$bin $dstdir/$bin
+	sudo install -m755 ./$bin $dstdir/$bin
 }
 
 function build_it() {
