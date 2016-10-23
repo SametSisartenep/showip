@@ -10,4 +10,4 @@ cflags = -Wall -Wextra -Werror -Wformat-security -Wpointer-arith $
 rule cc
   command = $${CC:-clang} $cppflags $cflags -o $out $in
 
-build showip: cc src/showip.c
+build showip: cc src/showip.c src/strlcpy.c

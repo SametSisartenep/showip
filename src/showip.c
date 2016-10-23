@@ -1,15 +1,4 @@
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <libgen.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <netdb.h>
-
-#include "arg.h"
+#include "pkg.h"
 
 #define VERSION "1.0"
 #define AUTHOR "Rodrigo González López <rodrigosloop AT gmail DOT com>"
@@ -52,7 +41,9 @@ int main (int argc, char *argv[])
 	char hn[HNSIZE];
 
 	if (argc > 0) {
-		strncpy(hn, argv[0], HNSIZE);
+		strlcpy(hn, argv[0], HNSIZE + 1);
+	} else {
+		usage();
 	}
 
 	struct addrinfo hints, *res, *np;
@@ -70,15 +61,15 @@ int main (int argc, char *argv[])
 	printf("IP addresses for %s\n\n", hn);
 
 	for (np = res; np; np = np->ai_next) {
-		char ipver[4];
+		char ipver[5];
 		char ipstr[INET6_ADDRSTRLEN];
 
 		switch (np->ai_family) {
 			case AF_INET:
-				strncpy(ipver, "IPv4", 4);
+				strlcpy(ipver, "IPv4", 5);
 				break;
 			case AF_INET6:
-				strncpy(ipver, "IPv6", 4);
+				strlcpy(ipver, "IPv6", 5);
 				break;
 		}
 
