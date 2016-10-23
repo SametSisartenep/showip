@@ -1,4 +1,29 @@
-Copyright (c) 2016 Rodrigo González López <rodrigosloop@gmail.com>
+## Show IP
+Simple domain name resolution tool (IPv4 + IPv6).
+
+### Installation
+
+```sh
+~$ ./install.sh
+```
+
+You can change the destination with the `PREFIX_DIR` environment
+variable (it defaults to `/usr/local/bin`):
+
+```sh
+~$ PREFIX_DIR=~/bin ./install.sh
+```
+
+### Usage
+
+```sh
+~$ showip <hostname>
+```
+
+## License
+
+```
+Copyright (c) 2016 Rodrigo González López &lt;<rodrigosloop@gmail.com>&gt;
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -23,3 +48,4 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
 LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```

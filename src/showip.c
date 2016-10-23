@@ -29,6 +29,7 @@ die(const char *errstr, ...)
 	va_start(ap, errstr);
 	vfprintf(stderr, errstr, ap);
 	va_end(ap);
+
 	exit(EXIT_FAILURE);
 }
 
@@ -69,15 +70,15 @@ int main (int argc, char *argv[])
 	printf("IP addresses for %s\n\n", hn);
 
 	for (np = res; np; np = np->ai_next) {
-		char *ipver;
+		char ipver[4];
 		char ipstr[INET6_ADDRSTRLEN];
 
 		switch (np->ai_family) {
 			case AF_INET:
-				ipver = "IPv4";
+				strncpy(ipver, "IPv4", 4);
 				break;
 			case AF_INET6:
-				ipver = "IPv6";
+				strncpy(ipver, "IPv6", 4);
 				break;
 		}
 
