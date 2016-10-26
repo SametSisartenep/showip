@@ -14,7 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "pkg.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "strlcpy.h"
 
 /*
  * Copy src to string dst of size siz.  At most siz-1 characters

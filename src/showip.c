@@ -1,9 +1,23 @@
-#include "pkg.h"
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <libgen.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <netdb.h>
 
-#define VERSION "1.0"
+#include "arg.h"
+#include "strlcpy.h"
+
+#define VERSION "1.1"
 #define AUTHOR "Rodrigo González López <rodrigosloop AT gmail DOT com>"
 
 #define HNSIZE 512
+#define IPVSIZ 5
 
 static void die(const char*, ...);
 static void usage(void);
@@ -30,6 +44,13 @@ usage(void)
 
 int main (int argc, char *argv[])
 {
+	char host[HNSIZE];
+	struct addrinfo hints, *res, *np;
+	int s;
+
+	char ipver[IPVSIZ];
+	char ipstr[INET6_ADDRSTRLEN];
+
 	ARGBEGIN {
 	case 'v':
 		die("showip-%s, Copyright (C) 2016 %s"
@@ -38,38 +59,31 @@ int main (int argc, char *argv[])
 		usage();
 	} ARGEND;
 
-	char hn[HNSIZE];
-
 	if (argc > 0) {
-		strlcpy(hn, argv[0], HNSIZE + 1);
+		strlcpy(host, argv[0], HNSIZE);
 	} else {
-		usage();
+		if (fgets(host, HNSIZE, stdin) == NULL) {
+			die("fgets: Couldn't read input\n");
+		} else {
+			host[strcspn(host, "\n")] = '\0';
+		}
 	}
-
-	struct addrinfo hints, *res, *np;
-	int s;
 
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 
-	if ((s = getaddrinfo(hn, NULL, &hints, &res)) != 0) {
-		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(s));
-		return 2;
+	if ((s = getaddrinfo(host, NULL, &hints, &res)) != 0) {
+		die("getaddrinfo: %s\n", gai_strerror(s));
 	}
 
-	printf("IP addresses for %s\n\n", hn);
-
 	for (np = res; np; np = np->ai_next) {
-		char ipver[5];
-		char ipstr[INET6_ADDRSTRLEN];
-
 		switch (np->ai_family) {
 			case AF_INET:
-				strlcpy(ipver, "IPv4", 5);
+				strlcpy(ipver, "ipv4", IPVSIZ);
 				break;
 			case AF_INET6:
-				strlcpy(ipver, "IPv6", 5);
+				strlcpy(ipver, "ipv6", IPVSIZ);
 				break;
 		}
 
@@ -77,7 +91,7 @@ int main (int argc, char *argv[])
 			ipstr, sizeof ipstr,
 			NULL, 0, NI_NUMERICHOST);
 
-		printf("\t%s:\t%s\n", ipver, ipstr);
+		printf("%s: /%s/%s\n", host, ipver, ipstr);
 	}
 
 	freeaddrinfo(res);
