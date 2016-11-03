@@ -4,21 +4,23 @@ Simple domain name resolution tool (IPv4 + IPv6).
 ### Installation
 
 ```sh
-~$ ./install.sh
+~$ make install
 ```
 
-You can change the destination with the `PREFIX_DIR` environment
-variable (it defaults to `/usr/local/bin`):
+You can change the destination with the `PREFIX` environment
+variable (it defaults to `/usr/local`):
 
 ```sh
-~$ PREFIX_DIR=~/bin ./install.sh
+~$ PREFIX=~/bin make install
 ```
 
 ### Usage
 
 ```sh
-~$ showip <hostname>
+~$ showip [-hv] <hostname>
 ```
+
+Also checkout the man page for some examples.
 
 ## License
 
