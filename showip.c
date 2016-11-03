@@ -13,7 +13,6 @@
 #include "arg.h"
 #include "strlcpy.h"
 
-#define VERSION "1.1"
 #define AUTHOR "Rodrigo González López <rodrigosloop AT gmail DOT com>"
 
 #define HNSIZE 512
@@ -65,7 +64,7 @@ int main (int argc, char *argv[])
 		if (fgets(host, HNSIZE, stdin) == NULL) {
 			die("fgets: Couldn't read input\n");
 		} else {
-			host[strcspn(host, "\n")] = '\0';
+			host[strlen(host)-1] = '\0';
 		}
 	}
 
