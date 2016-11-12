@@ -16,7 +16,6 @@
 #define AUTHOR "Rodrigo González López <rodrigosloop AT gmail DOT com>"
 
 #define HNSIZE 512
-#define IPVSIZ 5
 
 static void die(const char*, ...);
 static void usage(void);
@@ -47,7 +46,6 @@ int main (int argc, char *argv[])
 	struct addrinfo hints, *res, *np;
 	int s;
 
-	char ipver[IPVSIZ];
 	char ipstr[INET6_ADDRSTRLEN];
 
 	ARGBEGIN {
@@ -58,8 +56,12 @@ int main (int argc, char *argv[])
 		usage();
 	} ARGEND;
 
-	if (argc > 0) {
-		strlcpy(host, argv[0], HNSIZE);
+	if (isatty(STDIN_FILENO)) {
+		if (argc > 0) {
+			strlcpy(host, argv[0], HNSIZE);
+		} else {
+			usage();
+		}
 	} else {
 		if (fgets(host, HNSIZE, stdin) == NULL) {
 			die("fgets: Couldn't read input\n");
@@ -77,20 +79,11 @@ int main (int argc, char *argv[])
 	}
 
 	for (np = res; np; np = np->ai_next) {
-		switch (np->ai_family) {
-			case AF_INET:
-				strlcpy(ipver, "ipv4", IPVSIZ);
-				break;
-			case AF_INET6:
-				strlcpy(ipver, "ipv6", IPVSIZ);
-				break;
-		}
-
 		getnameinfo(np->ai_addr, np->ai_addrlen,
 			ipstr, sizeof ipstr,
 			NULL, 0, NI_NUMERICHOST);
 
-		printf("%s: /%s/%s\n", host, ipver, ipstr);
+		printf("%s\n", ipstr);
 	}
 
 	freeaddrinfo(res);

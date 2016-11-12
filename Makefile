@@ -2,7 +2,7 @@
 PREFIX = /usr/local
 MANPREFIX = $(PREFIX)/man
 
-VERSION = 1.1
+VERSION = 1.2
 SRC = showip.c strlcpy.c
 BIN = showip
 MAN = showip.1
@@ -29,6 +29,8 @@ install: all
 	@cp -f $(BIN) $(DESTDIR)$(PREFIX)/bin
 	@mkdir -p $(DESTDIR)$(MANPREFIX)/man1
 	@cp -f $(MAN) $(DESTDIR)$(MANPREFIX)/man1
+	@mkdir -p $(DESTDIR)$(PREFIX)/share/licenses/showip
+	@cp -f LICENSE $(DESTDIR)$(PREFIX)/share/licenses/showip
 
 distclean:
 	@echo Cleaning distribution tarball...
@@ -47,6 +49,7 @@ uninstall:
 	@echo Removing...
 	@rm -fv $(DESTDIR)$(PREFIX)/bin/$(BIN)
 	@rm -fv $(DESTDIR)$(MANPREFIX)/man1/$(MAN)
+	@rm -fv $(DESTDIR)$(PREFIX)/share/licenses/showip/LICENSE
 
 clean:
 	@echo Cleaning...
