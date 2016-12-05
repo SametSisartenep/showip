@@ -25,7 +25,7 @@ Also checkout the man page for some examples.
 ## License
 
 ```
-Copyright (c) 2016 Rodrigo González López &lt;<rodrigosloop@gmail.com>&gt;
+Copyright (c) 2016 Rodrigo González López <rodrigosloop@gmail.com>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

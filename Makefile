@@ -1,6 +1,6 @@
 
 PREFIX = /usr/local
-MANPREFIX = $(PREFIX)/man
+MANPREFIX = $(PREFIX)/share/man
 
 VERSION = 1.2
 SRC = showip.c strlcpy.c
